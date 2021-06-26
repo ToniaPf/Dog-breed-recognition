@@ -1,2 +1,4 @@
 /data
 /venv/
+/dog_detector/yolov3.weights
+/dog_detector/detector.h5
