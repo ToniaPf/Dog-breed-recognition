@@ -2,3 +2,5 @@
 /venv/
 /dog_detector/yolov3.weights
 /dog_detector/detector.h5
+/app/images/*
+/app/*.h5

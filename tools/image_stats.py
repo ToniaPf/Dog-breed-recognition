@@ -4,7 +4,7 @@ import PIL
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-images_dir = 'data/low/low-resolution-cropped'
+images_dir = '../data/Cropped/cropped/low-resolution-cropped'
 
 widths, heights = [], []
 for directory in os.listdir(images_dir):
