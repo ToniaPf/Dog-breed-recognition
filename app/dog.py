@@ -1,3 +1,6 @@
+import base64
+import io
+
 from flask import Flask, render_template, request, redirect
 import os
 
@@ -13,7 +16,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 detector = load_model(os.path.join(basedir, 'detector.h5'))
-predictor = load_model(os.path.join(basedir, 'resnet50_check.h5'))
+predictor = load_model(os.path.join(basedir, 'inception_224_v2_ft.h5'))
 
 dog_breeds = {
     0: 'Shiba dog', 1: 'French bulldog', 2: 'Siberian husky', 3: 'Malamute', 4: 'Pomeranian', 5: 'Airedale',
@@ -54,17 +57,22 @@ def index():
 @app.route('/classify', methods=['POST'])
 def classify():
     f = request.files['files[]']
+    if not f.filename:
+        f = request.files.getlist('files[]')[1]
     file_path = os.path.join(basedir, 'images', f.filename)
     f.save(file_path)
     v_boxes, v_labels, v_scores = detect_in_image(detector, file_path, 'dog')
     results = []
     for v_box in v_boxes:
         cropped_image = crop(file_path, v_box).resize((224, 224))
-        breed_probabilities = predictor.predict(np.array([img_to_array(cropped_image)]))[0]
+        breed_probabilities = predictor.predict(np.array([img_to_array(cropped_image) / 255]))[0]
         top_three = np.argpartition(breed_probabilities, -3)[-3:]
-        breeds = [dog_breeds[i] for i in top_three]
-        scores = [float(breed_probabilities[i]) for i in top_three]
-        results.append({'breeds': breeds, 'scores': scores})
+        breeds = [dog_breeds[i] for i in top_three][::-1]
+        scores = [float(breed_probabilities[i]) for i in top_three][::-1]
+        data = io.BytesIO()
+        cropped_image.save(data, "JPEG")
+        i = base64.b64encode(data.getvalue()).decode('utf-8')
+        results.append({'breeds': breeds, 'scores': scores, 'image': i})
     return {"success": True, 'results': results}, 200
 
 
