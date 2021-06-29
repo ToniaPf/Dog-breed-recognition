@@ -69,10 +69,11 @@ def classify():
         top_three = np.argpartition(breed_probabilities, -3)[-3:]
         breeds = [dog_breeds[i] for i in top_three][::-1]
         scores = [float(breed_probabilities[i]) for i in top_three][::-1]
+        scores_sorted, breeds_sorted = list(zip(*sorted(zip(scores, breeds), reverse=True)))
         data = io.BytesIO()
         cropped_image.save(data, "JPEG")
         i = base64.b64encode(data.getvalue()).decode('utf-8')
-        results.append({'breeds': breeds, 'scores': scores, 'image': i})
+        results.append({'breeds': breeds_sorted, 'scores': scores_sorted, 'image': i})
     return {"success": True, 'results': results}, 200
 
 
