@@ -8,10 +8,6 @@ from keras.preprocessing.image import img_to_array
 from matplotlib import pyplot
 from matplotlib.patches import Rectangle
 
-from tensorflow.keras.models import Model
-
-m = Model()
-
 
 class BoundBox:
     def __init__(self, xmin, ymin, xmax, ymax, objness=None, classes=None):
