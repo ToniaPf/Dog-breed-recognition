@@ -5,9 +5,10 @@
 Dog breed recognition using deep learning from images.
 
 
+### Dataset:
 
-### Datasets:
+https://cg.cs.tsinghua.edu.cn/ThuDogs/
 
-* http://vision.stanford.edu/aditya86/ImageNetDogs/
+### Presentation:
 
-* https://cg.cs.tsinghua.edu.cn/ThuDogs/
+https://docs.google.com/presentation/d/1jSSjHLztDWRP3VfuJpPY_E959bou1i2c8HlhHkNtGd4/edit?usp=sharing
